@@ -1,0 +1,359 @@
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>NDU Student Information System</title>
+  <style type="text/css">
+    body {
+      background-color: #000000;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    #Content {
+      width: 1024px;
+      margin: 0px auto;
+      text-align: center;
+    }
+
+    #textfield {
+      margin-left: 0px;
+    }
+  </style>
+  <script language="javascript">
+    function MM_preloadImages() {
+      var d = document;
+      if (d.images) {
+        if (!d.MM_p) d.MM_p = new Array();
+        var i, j = d.MM_p.length,
+          a = MM_preloadImages.arguments;
+        for (i = 0; i < a.length; i++)
+          if (a[i].indexOf("#") != 0) {
+            d.MM_p[j] = new Image;
+            d.MM_p[j++].src = a[i];
+          }
+      }
+    }
+    function MM_swapImgRestore() {
+      var i, x, a = document.MM_sr;
+      for (i = 0; a && i < a.length && (x = a[i]) && x.oSrc; i++) x.src = x.oSrc;
+    }
+    function MM_findObj(n, d) {
+      var p, i, x;
+      if (!d) d = document;
+      if ((p = n.indexOf("?")) > 0 && parent.frames.length) {
+        d = parent.frames[n.substring(p + 1)].document;
+        n = n.substring(0, p);
+      }
+      if (!(x = d[n]) && d.all) x = d.all[n];
+      for (i = 0; !x && i < d.forms.length; i++) x = d.forms[i][n];
+      for (i = 0; !x && d.layers && i < d.layers.length; i++) x = MM_findObj(n, d.layers[i].document);
+      if (!x && d.getElementById) x = d.getElementById(n);
+      return x;
+    }
+    function MM_swapImage() {
+      var i, j = 0,
+        x, a = MM_swapImage.arguments;
+      document.MM_sr = new Array();
+      for (i = 0; i < (a.length - 2); i += 3)
+        if ((x = MM_findObj(a[i])) != null) {
+          document.MM_sr[j++] = x; if (!x.oSrc) x.oSrc = x.src;
+          x.src = a[i + 2];
+        }
+    }
+  </script>
+
+  <script type="text/javascript">
+    function toHex(bytes) {
+      return Array.from(bytes)
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join('');
+    }
+
+    function toBase64(bytes) {
+      let binary = '';
+      for (let i = 0; i < bytes.length; i++) {
+        binary += String.fromCharCode(bytes[i]);
+      }
+      return btoa(binary);
+    }
+
+    async function sha256(message) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(message);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      return new Uint8Array(hashBuffer);
+    }
+
+    async function handleLogin() {
+      const username = document.form1.txtusername.value;
+      const password = document.form1.txtpassword.value;
+
+      const saltSeed = username.slice(-4);
+      const seedHash = await sha256(saltSeed);
+      const saltBytes = seedHash.slice(0, 16); // 16 bytes
+      const saltBase64 = toBase64(saltBytes);
+      const saltHex = toHex(saltBytes);
+
+      const saltedString = password + saltBase64;
+
+      const finalHashBytes = await sha256(saltedString);
+      const finalHashHex = toHex(finalHashBytes);
+
+      // 5. Display results in a new page
+      const htmlContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Login Details (SHA‑256 + Salt)</title>
+            <style>
+                body { font-family: Arial, sans-serif; background: #f0f0f0; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+                .container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); max-width: 700px; width: 100%; }
+                h2 { text-align: center; color: #333; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; }
+                table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                td { padding: 12px; border-bottom: 1px solid #ddd; }
+                td:first-child { font-weight: bold; width: 35%; background-color: #f9f9f9; }
+                td:last-child { word-break: break-all; font-family: monospace; }
+                .note { margin-top: 20px; font-size: 0.9em; color: #555; text-align: center; }
+                .hash { background-color: #fff3cd; padding: 4px 8px; border-radius: 4px; }
+                .salt { background-color: #e7f3fe; }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h2>Login Details</h2>
+                <table>
+                    <tr><td>Username (Student ID)</td><td>${username}</td></tr>
+                    <tr><td>Password (plain)</td><td>${password}</td></tr>
+                    <tr><td>Seed (last 4 digits)</td><td>${saltSeed}</td></tr>
+                    <tr><td>Derived Salt (16 bytes, Base64)</td><td class="salt">${saltBase64}</td></tr>
+                    <tr><td>Salted string (password + Base64 salt)</td><td>${saltedString}</td></tr>
+                    <tr><td>SHA‑256 Hash (hex)</td><td class="hash">${finalHashHex}</td></tr>
+                </table>
+
+            </div>
+        </body>
+        </html>
+        `;
+
+      const newWin = window.open('', '_blank', 'width=750,height=550,scrollbars=yes,resizable=yes');
+      if (newWin) {
+        newWin.document.write(htmlContent);
+        newWin.document.close();
+      } else {
+        alert('Please allow popups for this site to see the result.\n\nHash: ' + finalHashHex);
+      }
+
+      /*console.log('Form submitted!');
+      console.log('Username (Student ID):', username);
+      console.log('password stored regularly: ', password);
+      console.log('password stored after hash (SHA 256)', finalHashHex);
+      console.log('Derived salt (last 4 digits as seed):', saltSeed);
+      console.log('password stored after salting :', saltedString);*/
+    }
+
+    window.go_to = function (pro_no, sis, std) {
+      if (pro_no === 1) {
+        handleLogin();
+        return false;
+        document.form1.txtusername.value = '';
+        document.form1.txtpassword.value = '';
+        document.form1.txtusername.focus();
+        return false;
+      }
+    };
+
+    document.form1.onkeydown = null;
+
+    document.form1.addEventListener('submit', function (e) {
+      e.preventDefault();
+      return false;
+    }, true);
+
+    window.form1_onsubmit = function () { return false; };
+
+    window.onload = function () {
+      document.form1.txtusername.focus();
+    };
+  </script>
+</head>
+
+<body onload="MM_preloadImages('images/LoginOver.gif','images/ClearOver.gif')">
+  <div id="Content">
+    <form method="post" id="form1" name="form1">
+      <table width="1024" border="0" cellspacing="0" cellpadding="0">
+        <tbody>
+          <tr>
+            <td height="225" align="left" valign="top" bgcolor="#FFFFFF">
+              <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tbody>
+                  <tr>
+                    <td width="424">&nbsp;</td>
+                    <td width="178" align="left" valign="top">
+                      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tbody>
+                          <tr>
+                            <td height="28">&nbsp;</td>
+                          </tr>
+                          <tr>
+                            <td align="left" valign="top"><img
+                                src="./Notre Dame University-Louaize_ Student Information System_files/SisLogo.gif"
+                                width="178" height="196"></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </td>
+                    <td width="260">&nbsp;</td>
+                    <td width="56" align="left" valign="top">
+                      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tbody>
+                          <tr>
+                            <td height="28">&nbsp;</td>
+                          </tr>
+                          <tr>
+                            <td align="left" valign="top"><a href="http://www.ndu.edu.lb/" target="_blank"><img
+                                  src="./Notre Dame University-Louaize_ Student Information System_files/nduLogo_old.gif"
+                                  border="0"></a></td>
+                          </tr>
+                          <tr>
+                            <td>&nbsp;</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </td>
+                    <td>&nbsp;</td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td height="24" align="left" valign="top"><img
+                src="./Notre Dame University-Louaize_ Student Information System_files/StripTurquoie.gif" alt=""
+                width="1024" height="25"></td>
+          </tr>
+          <tr>
+            <td height="525" align="left" valign="top"
+              background="./Notre Dame University-Louaize_ Student Information System_files/BGDegrade.jpg"
+              style="background-repeat:no-repeat">
+              <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tbody>
+                  <tr>
+                    <td width="280" height="44">&nbsp;</td>
+                    <td height="44">&nbsp;</td>
+                    <td width="280" height="44">&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td width="280">&nbsp;</td>
+                    <td height="160" align="left" valign="top">
+                      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tbody>
+                          <tr>
+                            <td height="52" align="left" valign="top">
+                              <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tbody>
+                                  <tr>
+                                    <td width="112"><img
+                                        src="./Notre Dame University-Louaize_ Student Information System_files/StudentID.gif"
+                                        width="110" height="48"></td>
+                                    <td width="177">&nbsp;</td>
+                                    <td width="176" align="right" valign="bottom"><label>
+                                        <input name="txtusername" type="text" id="textfield" size="27" maxlength="8"
+                                          style="WIDTH: 180px;" value="">
+                                      </label></td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td height="1" bgcolor="#999999"><img
+                                src="./Notre Dame University-Louaize_ Student Information System_files/spacer.gif"
+                                width="1" height="1"></td>
+                          </tr>
+                          <tr>
+                            <td height="13">&nbsp;</td>
+                          </tr>
+                          <tr>
+                            <td height="52" align="left" valign="top">
+                              <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tbody>
+                                  <tr>
+                                    <td width="112" align="left" valign="top"><img
+                                        src="./Notre Dame University-Louaize_ Student Information System_files/Pin.gif"
+                                        height="48" style="width: 110px"></td>
+                                    <td width="177">&nbsp;</td>
+                                    <td width="176" align="right" valign="bottom"><label>
+                                        <input name="txtpassword" type="password" id="textfield2" size="27"
+                                          style="WIDTH: 180px; ">
+                                      </label></td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td height="1" bgcolor="#999999"><img
+                                src="./Notre Dame University-Louaize_ Student Information System_files/spacer.gif"
+                                width="1" height="1"></td>
+                          </tr>
+                          <tr>
+                            <td height="26">&nbsp;</td>
+                          </tr>
+                          <tr>
+                            <td height="16" align="left" valign="top">
+                              <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tbody>
+                                  <tr>
+                                    <td width="367">&nbsp;</td>
+                                    <td width="46" align="left" valign="top">
+                                      <a href="#" onclick="javascript:go_to(1,'N','Y'); return false;"
+                                        onmouseout="MM_swapImgRestore()"
+                                        onmouseover="MM_swapImage('Image8','','images/LoginOver.gif',1)">
+                                        <img
+                                          src="./Notre Dame University-Louaize_ Student Information System_files/LoginUp.gif"
+                                          name="Image8" width="46" height="16" border="0" id="Image8">
+                                      </a>
+                                    </td>
+                                    <td width="9">&nbsp;</td>
+                                    <td align="left" valign="top">
+                                      <a href="#" onclick="javascript:go_to(2); return false;"
+                                        onmouseout="MM_swapImgRestore()"
+                                        onmouseover="MM_swapImage('Image9','','images/ClearOver.gif',1)">
+                                        <img
+                                          src="./Notre Dame University-Louaize_ Student Information System_files/ClearUp.gif"
+                                          name="Image9" width="44" height="16" border="0" id="Image9">
+                                      </a>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </td>
+                    <td width="280">&nbsp;</td>
+                  </tr>
+                  <tr>
+                    <td width="280">&nbsp;</td>
+                    <td align="left"></td>
+                    <td width="280">&nbsp;</td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+  </div>
+  <script type="text/javascript">
+    document.form1.txtusername.focus();
+  </script>
+</body>
+
+</html>
