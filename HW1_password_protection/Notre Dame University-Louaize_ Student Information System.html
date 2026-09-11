@@ -6,6 +6,10 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <title>NDU Student Information System</title>
   <style type="text/css">
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       background-color: #000000;
       margin: 0 auto;
@@ -21,7 +25,174 @@
     #textfield {
       margin-left: 0px;
     }
+
+    .sis-h2 {
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      color: #ffffff;
+      margin: 18px 0 8px 0;
+      text-align: left;
+      border-bottom: 2px solid #4fd0e0;
+      padding-bottom: 5px;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+    }
+
+    .sis-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      background: #ffffff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+    }
+
+    .sis-table th {
+      background: #0f5f6b;
+      color: #ffffff;
+      text-align: left;
+      padding: 6px 8px;
+      border: 1px solid #127d8b;
+      font-weight: bold;
+    }
+
+    .sis-table td {
+      border: 1px solid #d8e2e8;
+      padding: 6px 8px;
+      word-break: break-all;
+      vertical-align: top;
+      background: #ffffff;
+      color: #1f2d3d;
+    }
+
+    .sis-table tbody tr:nth-child(even) td {
+      background: #f4fbfc;
+    }
+
+    .sis-table .empty td {
+      color: #93a2ad;
+      font-style: italic;
+    }
+
+    .sis-label {
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      font-weight: bold;
+      color: #ffffff;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+    }
+
+    .sis-input {
+      border: 1px solid #b0bec5;
+      border-radius: 3px;
+      background: #ffffff;
+      padding: 7px 10px;
+      font-size: 14px;
+      color: #1f2d3d;
+      outline: none;
+      width: 100%;
+      max-width: 260px;
+      font-family: Arial, sans-serif;
+      transition: border-color 0.2s;
+    }
+
+    .sis-input:focus {
+      border-color: #1ba7b8;
+      box-shadow: 0 0 6px rgba(27, 167, 184, 0.6);
+    }
+
+    .sis-input.invalid {
+      border-color: #ef4444;
+      background-color: #fff5f5;
+    }
+
+    .sis-btn {
+      background: linear-gradient(180deg, #2ec4d6, #127d8b);
+      color: #ffffff;
+      border: 1px solid #0f5f6b;
+      border-radius: 3px;
+      padding: 7px 20px;
+      font-weight: bold;
+      font-size: 11px;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-family: Arial, sans-serif;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    }
+
+    .sis-btn:hover {
+      background: linear-gradient(180deg, #45d3e4, #159aab);
+    }
+
+    .sis-msg {
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      font-weight: bold;
+      min-height: 15px;
+      margin: 12px 0 0 0;
+      text-align: left;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+    }
+
+    .sis-msg.error {
+      color: #fca5a5;
+    }
+
+    .sis-msg.ok {
+      color: #86efac;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-weight: bold;
+      font-size: 10px;
+      letter-spacing: .5px;
+    }
+
+    .badge.pass {
+      background: rgba(34, 197, 94, .25);
+      color: #86efac;
+      border: 1px solid rgba(34, 197, 94, .6);
+    }
+
+    .badge.fail {
+      background: rgba(239, 68, 68, .25);
+      color: #fca5a5;
+      border: 1px solid rgba(239, 68, 68, .6);
+    }
+
+    .res-list {
+      list-style: none;
+      margin: 12px 0 0 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      text-align: left;
+      color: #ffffff;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+    }
+
+    .res-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 7px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      gap: 12px;
+    }
+
+    .sis-degrade {
+      background-image: url('./Notre Dame University-Louaize_ Student Information System_files/BGDegrade.jpg');
+      background-repeat: no-repeat;
+      background-position: top center;
+      background-size: 100% 100%;
+    }
   </style>
+
   <script language="javascript">
     function MM_preloadImages() {
       var d = document;
@@ -49,7 +220,7 @@
       }
       if (!(x = d[n]) && d.all) x = d.all[n];
       for (i = 0; !x && i < d.forms.length; i++) x = d.forms[i][n];
-      for (i = 0; !x && d.layers && i < d.layers.length; i++) x = MM_findObj(n, d.layers[i].document);
+      for (i = 0; !x && i < d.layers && i < d.layers.length; i++) x = MM_findObj(n, d.layers[i].document);
       if (!x && d.getElementById) x = d.getElementById(n);
       return x;
     }
@@ -66,6 +237,7 @@
   </script>
 
   <script type="text/javascript">
+
     function toHex(bytes) {
       return Array.from(bytes)
         .map(b => b.toString(16).padStart(2, '0'))
@@ -87,95 +259,202 @@
       return new Uint8Array(hashBuffer);
     }
 
-    async function handleLogin() {
-      const username = document.form1.txtusername.value;
-      const password = document.form1.txtpassword.value;
+    const USERNAME_RE = /^[0-9]{4,}$/;
 
-      const saltSeed = username.slice(-4);
-      const seedHash = await sha256(saltSeed);
-      const saltBytes = seedHash.slice(0, 16); // 16 bytes
-      const saltBase64 = toBase64(saltBytes);
-      const saltHex = toHex(saltBytes);
+    const db = {
+      table1: [], // { userId, username, passwordPlain }
+      table2: [], // { userId, username, passwordHash }
+      table3: []  // { userId, username, salt, saltedHash, timestamp }
+    };
 
-      const saltedString = password + saltBase64;
-
-      const finalHashBytes = await sha256(saltedString);
-      const finalHashHex = toHex(finalHashBytes);
-
-      // 5. Display results in a new page
-      const htmlContent = `
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="UTF-8">
-            <title>Login Details (SHA‑256 + Salt)</title>
-            <style>
-                body { font-family: Arial, sans-serif; background: #f0f0f0; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-                .container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); max-width: 700px; width: 100%; }
-                h2 { text-align: center; color: #333; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; }
-                table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-                td { padding: 12px; border-bottom: 1px solid #ddd; }
-                td:first-child { font-weight: bold; width: 35%; background-color: #f9f9f9; }
-                td:last-child { word-break: break-all; font-family: monospace; }
-                .note { margin-top: 20px; font-size: 0.9em; color: #555; text-align: center; }
-                .hash { background-color: #fff3cd; padding: 4px 8px; border-radius: 4px; }
-                .salt { background-color: #e7f3fe; }
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <h2>Login Details</h2>
-                <table>
-                    <tr><td>Username (Student ID)</td><td>${username}</td></tr>
-                    <tr><td>Password (plain)</td><td>${password}</td></tr>
-                    <tr><td>Seed (last 4 digits)</td><td>${saltSeed}</td></tr>
-                    <tr><td>Derived Salt (16 bytes, Base64)</td><td class="salt">${saltBase64}</td></tr>
-                    <tr><td>Salted string (password + Base64 salt)</td><td>${saltedString}</td></tr>
-                    <tr><td>SHA‑256 Hash (hex)</td><td class="hash">${finalHashHex}</td></tr>
-                </table>
-
-            </div>
-        </body>
-        </html>
-        `;
-
-      const newWin = window.open('', '_blank', 'width=750,height=550,scrollbars=yes,resizable=yes');
-      if (newWin) {
-        newWin.document.write(htmlContent);
-        newWin.document.close();
-      } else {
-        alert('Please allow popups for this site to see the result.\n\nHash: ' + finalHashHex);
-      }
-
-      /*console.log('Form submitted!');
-      console.log('Username (Student ID):', username);
-      console.log('password stored regularly: ', password);
-      console.log('password stored after hash (SHA 256)', finalHashHex);
-      console.log('Derived salt (last 4 digits as seed):', saltSeed);
-      console.log('password stored after salting :', saltedString);*/
+    function escapeHtml(v) {
+      return String(v).replace(/[&<>"']/g, c => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[c]));
     }
 
-    window.go_to = function (pro_no, sis, std) {
-      if (pro_no === 1) {
-        handleLogin();
+    function setMsg(id, text, isError) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.textContent = text || '';
+      el.className = 'sis-msg' + (text ? (isError ? ' error' : ' ok') : '');
+    }
+
+    /* Keep the field numeric-only as the user types */
+    function enforceDigits(input) {
+      if (!input) return;
+      input.addEventListener('input', () => {
+        const cleaned = input.value.replace(/[^0-9]/g, '');
+        if (cleaned !== input.value) input.value = cleaned;
+        input.classList.toggle('invalid', input.value.length > 0 && !USERNAME_RE.test(input.value));
+      });
+      input.addEventListener('blur', () => {
+        input.classList.toggle('invalid', input.value.length > 0 && !USERNAME_RE.test(input.value));
+      });
+    }
+
+    function renderTables() {
+      const t1 = document.querySelector('#table1 tbody');
+      const t2 = document.querySelector('#table2 tbody');
+      const t3 = document.querySelector('#table3 tbody');
+
+      t1.innerHTML = db.table1.length
+        ? db.table1.map(r =>
+          `<tr><td>${escapeHtml(r.userId)}</td><td>${escapeHtml(r.username)}</td><td>${escapeHtml(r.passwordPlain)}</td></tr>`
+        ).join('')
+        : `<tr class="empty"><td colspan="3">No records yet.</td></tr>`;
+
+      t2.innerHTML = db.table2.length
+        ? db.table2.map(r =>
+          `<tr><td>${escapeHtml(r.userId)}</td><td>${escapeHtml(r.username)}</td><td>${escapeHtml(r.passwordHash)}</td></tr>`
+        ).join('')
+        : `<tr class="empty"><td colspan="3">No records yet.</td></tr>`;
+
+      t3.innerHTML = db.table3.length
+        ? db.table3.map(r =>
+          `<tr>
+             <td>${escapeHtml(r.userId)}</td>
+             <td>${escapeHtml(r.username)}</td>
+             <td>${escapeHtml(r.salt)}</td>
+             <td>${escapeHtml(r.saltedHash)}</td>
+             <td>${escapeHtml(r.timestamp)}</td>
+           </tr>`
+        ).join('')
+        : `<tr class="empty"><td colspan="5">No records yet.</td></tr>`;
+    }
+
+
+    async function handleRegister() {
+      setMsg('regMsg', '');
+
+      const username = document.form1.regusername.value.trim();
+      const password = document.form1.regpassword.value;
+
+      if (!USERNAME_RE.test(username)) {
+        setMsg('regMsg', 'Student ID must be at least 4 digits (numbers only).', true);
+        document.form1.regusername.classList.add('invalid');
+        document.form1.regusername.focus();
         return false;
-        document.form1.txtusername.value = '';
-        document.form1.txtpassword.value = '';
+      }
+      if (!password) {
+        setMsg('regMsg', 'Please enter a PIN / password.', true);
+        document.form1.regpassword.focus();
+        return false;
+      }
+      if (db.table1.some(u => u.username === username)) {
+        setMsg('regMsg', 'That Student ID is already registered.', true);
+        return false;
+      }
+
+      const userId = crypto.randomUUID();
+      const timestamp = new Date().toISOString();
+
+      const passwordPlain = password;
+
+      const passwordHash = toHex(await sha256(password));
+
+      const saltSeed = username.slice(-4);                 // always 4 digits now
+      const seedHash = await sha256(saltSeed);
+      const saltBytes = seedHash.slice(0, 16);             // 16 bytes
+      const saltBase64 = toBase64(saltBytes);
+      const saltedHash = toHex(await sha256(password + saltBase64));
+
+      db.table1.push({ userId, username, passwordPlain });
+      db.table2.push({ userId, username, passwordHash });
+      db.table3.push({ userId, username, salt: saltBase64, saltedHash, timestamp });
+
+      renderTables();
+
+      document.form1.regusername.value = '';
+      document.form1.regpassword.value = '';
+      document.form1.regusername.classList.remove('invalid');
+      setMsg('regMsg', 'Student registered successfully.', false);
+      return false;
+    }
+
+    async function handleLogin() {
+      setMsg('loginMsg', '');
+      document.getElementById('loginResults').style.display = 'none';
+
+      const username = document.form1.txtusername.value.trim();
+      const password = document.form1.txtpassword.value;
+
+      if (!USERNAME_RE.test(username)) {
+        setMsg('loginMsg', 'Student ID must be at least 4 digits (numbers only).', true);
+        document.form1.txtusername.classList.add('invalid');
         document.form1.txtusername.focus();
         return false;
       }
+      if (!password) {
+        setMsg('loginMsg', 'Please enter your PIN / password.', true);
+        document.form1.txtpassword.focus();
+        return false;
+      }
+
+      const u1 = db.table1.find(u => u.username === username);
+      const u2 = db.table2.find(u => u.username === username);
+      const u3 = db.table3.find(u => u.username === username);
+
+      if (!u1 && !u2 && !u3) {
+        setMsg('loginMsg', 'No account found for that Student ID.', true);
+        return false;
+      }
+
+      const res1 = !!(u1 && u1.passwordPlain === password);
+
+      const inputHash = toHex(await sha256(password));
+      const res2 = !!(u2 && u2.passwordHash === inputHash);
+
+      let res3 = false;
+      if (u3) {
+        const inputSalted = toHex(await sha256(password + u3.salt));
+        res3 = u3.saltedHash === inputSalted;
+      }
+
+      document.getElementById('loginResults').style.display = 'block';
+      setBadge('res1', res1);
+      setBadge('res2', res2);
+      setBadge('res3', res3);
+
+      setMsg('loginMsg', res3 ? 'Login successful (salted hash verified).' : 'Login failed.', !res3);
+      return false;
+    }
+
+    function setBadge(id, isPass) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.textContent = isPass ? 'PASS' : 'FAIL';
+      el.className = 'badge ' + (isPass ? 'pass' : 'fail');
+    }
+
+    function clearLogin() {
+      document.form1.txtusername.value = '';
+      document.form1.txtpassword.value = '';
+      document.form1.txtusername.classList.remove('invalid');
+      setMsg('loginMsg', '');
+      document.getElementById('loginResults').style.display = 'none';
+      document.form1.txtusername.focus();
+      return false;
+    }
+
+    window.go_to = function (pro_no, sis, std) {
+      if (pro_no === 1) { handleLogin(); return false; }
+      if (pro_no === 2) { clearLogin(); return false; }
+      return false;
     };
 
-    document.form1.onkeydown = null;
-
-    document.form1.addEventListener('submit', function (e) {
-      e.preventDefault();
-      return false;
-    }, true);
-
-    window.form1_onsubmit = function () { return false; };
 
     window.onload = function () {
+      enforceDigits(document.form1.txtusername);
+      enforceDigits(document.form1.regusername);
+
+      /* Prevent the native submit (Enter key) from reloading the page */
+      document.form1.addEventListener('submit', function (e) {
+        e.preventDefault();
+        return false;
+      }, true);
+
+      renderTables();
       document.form1.txtusername.focus();
     };
   </script>
@@ -230,15 +509,15 @@
               </table>
             </td>
           </tr>
+
           <tr>
             <td height="24" align="left" valign="top"><img
                 src="./Notre Dame University-Louaize_ Student Information System_files/StripTurquoie.gif" alt=""
                 width="1024" height="25"></td>
           </tr>
+
           <tr>
-            <td height="525" align="left" valign="top"
-              background="./Notre Dame University-Louaize_ Student Information System_files/BGDegrade.jpg"
-              style="background-repeat:no-repeat">
+            <td align="left" valign="top" class="sis-degrade">
               <table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tbody>
                   <tr>
@@ -246,6 +525,7 @@
                     <td height="44">&nbsp;</td>
                     <td width="280" height="44">&nbsp;</td>
                   </tr>
+
                   <tr>
                     <td width="280">&nbsp;</td>
                     <td height="160" align="left" valign="top">
@@ -262,7 +542,7 @@
                                     <td width="177">&nbsp;</td>
                                     <td width="176" align="right" valign="bottom"><label>
                                         <input name="txtusername" type="text" id="textfield" size="27" maxlength="8"
-                                          style="WIDTH: 180px;" value="">
+                                          style="WIDTH: 180px;" value="" inputmode="numeric" autocomplete="off">
                                       </label></td>
                                   </tr>
                                 </tbody>
@@ -288,7 +568,7 @@
                                     <td width="177">&nbsp;</td>
                                     <td width="176" align="right" valign="bottom"><label>
                                         <input name="txtpassword" type="password" id="textfield2" size="27"
-                                          style="WIDTH: 180px; ">
+                                          style="WIDTH: 180px;" autocomplete="off">
                                       </label></td>
                                   </tr>
                                 </tbody>
@@ -335,12 +615,97 @@
                           </tr>
                         </tbody>
                       </table>
+
+                      <div id="loginResults" style="display:none; margin-top: 10px;">
+                        <ul class="res-list">
+                          <li><span>Table 1 (Plaintext Match):</span> <span id="res1" class="badge"></span></li>
+                          <li><span>Table 2 (Unsalted Hash Match):</span> <span id="res2" class="badge"></span></li>
+                          <li><span>Table 3 (Salted Hash Match):</span> <span id="res3" class="badge"></span></li>
+                        </ul>
+                      </div>
+                      <p id="loginMsg" class="sis-msg"></p>
                     </td>
                     <td width="280">&nbsp;</td>
                   </tr>
+
                   <tr>
                     <td width="280">&nbsp;</td>
-                    <td align="left"></td>
+                    <td align="left" valign="top" style="padding-top:18px;">
+                      <h2 class="sis-h2">New User Registration</h2>
+                      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tbody>
+                          <tr>
+                            <td class="sis-label" style="width:110px; padding:8px 8px 8px 0;">Student ID</td>
+                            <td align="right" style="padding:8px 0;">
+                              <input type="text" id="regusername" name="regusername" class="sis-input" maxlength="8"
+                                inputmode="numeric" autocomplete="off" style="width:180px;">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="sis-label" style="padding:8px 8px 8px 0;">PIN</td>
+                            <td align="right" style="padding:8px 0;">
+                              <input type="password" id="regpassword" name="regpassword" class="sis-input"
+                                autocomplete="off" style="width:180px;">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td colspan="2" align="right" style="padding:12px 0 0 0;">
+                              <button type="button" class="sis-btn"
+                                onclick="handleRegister(); return false;">Register</button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <p id="regMsg" class="sis-msg"></p>
+                    </td>
+                    <td width="280">&nbsp;</td>
+                  </tr>
+
+                  <tr>
+                    <td colspan="3" align="left" valign="top" style="padding: 10px 20px 40px 20px;">
+                      <h2 class="sis-h2">Table 1: Plaintext Storage (Insecure)</h2>
+                      <table class="sis-table" id="table1">
+                        <thead>
+                          <tr>
+                            <th>User ID</th>
+                            <th>Username</th>
+                            <th>Password (Plain)</th>
+                          </tr>
+                        </thead>
+                        <tbody></tbody>
+                      </table>
+
+                      <h2 class="sis-h2">Table 2: Unsalted Hash Storage (SHA-256)</h2>
+                      <table class="sis-table" id="table2">
+                        <thead>
+                          <tr>
+                            <th>User ID</th>
+                            <th>Username</th>
+                            <th>Password Hash (SHA-256)</th>
+                          </tr>
+                        </thead>
+                        <tbody></tbody>
+                      </table>
+
+                      <h2 class="sis-h2">Table 3: Deterministic Salt + Hash Storage</h2>
+                      <table class="sis-table" id="table3">
+                        <thead>
+                          <tr>
+                            <th>User ID</th>
+                            <th>Username</th>
+                            <th>Derived Salt</th>
+                            <th>Salted Hash (SHA-256)</th>
+                            <th>Timestamp</th>
+                          </tr>
+                        </thead>
+                        <tbody></tbody>
+                      </table>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td width="280">&nbsp;</td>
+                    <td align="left">&nbsp;</td>
                     <td width="280">&nbsp;</td>
                   </tr>
                 </tbody>
@@ -351,6 +716,7 @@
       </table>
     </form>
   </div>
+
   <script type="text/javascript">
     document.form1.txtusername.focus();
   </script>
