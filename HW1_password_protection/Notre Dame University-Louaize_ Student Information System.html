@@ -264,7 +264,7 @@
     const db = {
       table1: [], // { userId, username, passwordPlain }
       table2: [], // { userId, username, passwordHash }
-      table3: []  // { userId, username, salt, saltedHash, timestamp }
+      table3: []  // { userId, username, salt, saltedHash }
     };
 
     function escapeHtml(v) {
@@ -317,7 +317,6 @@
              <td>${escapeHtml(r.username)}</td>
              <td>${escapeHtml(r.salt)}</td>
              <td>${escapeHtml(r.saltedHash)}</td>
-             <td>${escapeHtml(r.timestamp)}</td>
            </tr>`
         ).join('')
         : `<tr class="empty"><td colspan="5">No records yet.</td></tr>`;
@@ -347,7 +346,6 @@
       }
 
       const userId = crypto.randomUUID();
-      const timestamp = new Date().toISOString();
 
       const passwordPlain = password;
 
@@ -361,7 +359,7 @@
 
       db.table1.push({ userId, username, passwordPlain });
       db.table2.push({ userId, username, passwordHash });
-      db.table3.push({ userId, username, salt: saltBase64, saltedHash, timestamp });
+      db.table3.push({ userId, username, salt: saltBase64, saltedHash });
 
       renderTables();
 
@@ -695,7 +693,6 @@
                             <th>Username</th>
                             <th>Derived Salt</th>
                             <th>Salted Hash (SHA-256)</th>
-                            <th>Timestamp</th>
                           </tr>
                         </thead>
                         <tbody></tbody>
